@@ -9,12 +9,43 @@ bool hit_sphere(const point3& center, double radius, const ray& r) {
     vec3 oc = r.origin() - center;
     auto a = dot(r.direction(), r.direction());
     auto b = 2.0 * dot(oc, r.direction());
-    auto c = dot(oc, oc) - radius*radius;
+    auto c = dot(oc, oc) - radius*radius; 
     auto discriminant = b*b - 4*a*c;
     return (discriminant > 0);
 }
 
 color ray_color(const ray& r) {
+    point3 center = point3(0,0,-1);
+    double rd = 0.1;
+    point3 P = (r.direction());
+    // if (dot(r.origin() - center + r.direction(), r.origin() - center + r.direction())  == 9*rd^2 ){
+    //     return color(1,0,0);
+    // }
+    // if (P.z() + rd == center.z() && P.y() - rd <= center.y() && center.y() <= P.y() + rd && P.x() - rd <= center.x() && center.x() <= P.x() + rd){
+    //     std::cout << "Here!";
+    //     return color(1, 0, 0);
+    // }
+    // if (P.e[2] - rd == center.e[2] && P.e[1] - rd <= center.e[1] && center.e[1] <= P.e[1] + rd && P.e[0] - rd <= center.e[0] && center.e[0] <= P.e[0] + rd){
+    //     std::cout << "Here!";
+    //     return color(1, 0, 0);
+    // }
+    // if (P.e[1] + rd == center.e[1] && P.e[2] - rd <= center.e[2] && center.e[2] <= P.e[2] + rd && P.e[0] - rd <= center.e[0] && center.e[0] <= P.e[0] + rd){
+    //     std::cout << "XD!";
+    //     return color(1, 0, 0);
+    // }
+    // if (P.e[1] - rd == center.e[1] && P.e[2] - rd <= center.e[2] && center.e[2] <= P.e[2] + rd && P.e[0] - rd <= center.e[0] && center.e[0] <= P.e[0] + rd){
+    //     std::cout << "Xd!";
+    //     return color(1, 0, 0);
+    // }
+    // if (P.e[0] - rd == center.e[0] && P.e[2] - rd <= center.e[2] && center.e[2] <= P.e[2] + rd && P.e[1] - rd <= center.e[1] && center.e[1] <= P.e[1] + rd){
+    //     std::cout << "Here!";
+    //     return color(1, 0, 0);
+    // }
+    // if (P.e[0] + rd == center.e[0] && P.e[2] - rd <= center.e[2] && center.e[2] <= P.e[2] + rd && P.e[1] - rd <= center.e[1] && center.e[1] <= P.e[1] + rd){
+    //     std::cout << "Here!";
+    //     return color(1, 0, 0);
+    // }
+    
     if (hit_sphere(point3(0,0,-1), 0.5, r))
         return color(1, 0, 0);
     vec3 unit_direction = unit_vector(r.direction());
@@ -56,7 +87,7 @@ int main() {
             color pixel_color = ray_color(r);
             write_color(myfile, pixel_color);
         }
-        std::cout << "\nDone.\n";
+        // std::cout << "\nDone.\n";
     }
     myfile.close();
 }
