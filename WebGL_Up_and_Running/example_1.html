@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title> WebGL Up and Running &mdash; Example 1</title>
+    </head>
+    <meta http-equiv="content-type" content="text/html: charset=ISO-8859-1">
+    <script type="text/javascript">
+        function initWebGL(canvas){
+            var gl;
+            try {
+                gl = canvas.getContext("experimental-webgl");
+            }
+            catch(e){
+                var msg = "Error creating WebGL Context: " + e.toString();
+                alert(msg);
+                throw Error(msg);
+            }
+            return gl;
+        }
+        function initViewport(gl, canvas){
+            gl.viewport(0,0,canvas.width, canvas.height);
+        }
+        
+    </script>
+</html>
