@@ -54,3 +54,12 @@
 ### Buffers, ArrayBuffers, and Typed Arrays
 ### Matrices
 - ModelView Matrix - Position with respect to the camera
+- Projection Matrix - Used by Shader to transform 3D coordinates into 2D coordinates, i.e., projecting 3D onto 2D
+### The Shader
+- Composed of two parts: Vertex Shader & Fragment Shader
+- Vertex Shader: Transformation/Projection of objects onto 2D
+- Fragment Shader: Generation of final color o\for each pixel
+- Inputs to Fragment Shaders: color, texture, lighting and material values
+### Drawing Primitives
+- Drawing a Square
+
