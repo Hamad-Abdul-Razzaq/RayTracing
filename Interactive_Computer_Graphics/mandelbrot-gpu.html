@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>GPU - Mandelbrot Set</title>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        varying vec4 vPos;
+        void main(){ 
+            gl_PointSize = 1.0;
+            gl_Position = vPosition;
+            vPos = vPosition;
+            }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float; 
+        varying vec4 vPos;
+
+        struct complex {
+            float real;
+            float imag;
+        };
+
+        float real(complex c1){
+            return c1.real;
+        }
+
+        float imag(complex c1){
+            return c1.imag;
+        }
+
+        float mag(complex c1){
+            return pow((pow(c1.real, 2.0)) + (pow(c1.imag, 2.0)),(0.5));
+        }
+
+        complex add(complex c1, complex c2){
+            return complex(c1.real + c2.real, c1.imag + c2.imag);
+        }
+
+        complex square(complex c1){
+            return complex(pow(c1.real, 2.0) - pow(c1.imag,2.0), 2.0*c1.real*c1.imag);
+        }
+
+
+        void main() {
+            const int nt = 100;
+            float mx = vPos.x*2.0;
+            float my = vPos.y*2.0;
+            complex c;
+            c.real = mx;
+            c.imag = my;
+            complex n0;
+            n0.real = 0.0;
+            n0.imag = 0.0;
+            int count = 1;
+            for (int i = 1; i <= nt; i++){
+                complex tmp = add(square(n0), c);
+                n0 = tmp;
+                float abs_ = mag(n0);
+                if (abs_ > 2.0){
+                    break;
+                }
+                else{
+                    count++;
+                }
+            }
+            if (count < 5){
+                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+            }
+            else if (count >= nt){
+                gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+            else if (count >= nt - 80){
+                gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+            }
+            else{
+                gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+            }
+
+
+        } 
+    </script>
+
+    <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="../Common/initShaders.js"></script>
+    <script type="text/javascript" src="../Common/MV.js"></script>
+    <script src="https://unpkg.com/mathjs@9.5.0/lib/browser/math.js"></script>
+    <script type="text/javascript" src="mandelbrot-gpu.js"></script>
+</head>
+<style>
+    canvas,
+    #gl-canvas {
+        align-content: center;
+    }
+</style>
+
+<body>
+    <canvas id="gl-canvas" width="2952" height="2508">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+</body>
+
+</html>

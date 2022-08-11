@@ -33,19 +33,19 @@ window.onload = function init() // The first function to get executed
 
         // And, add our initial point into our array of points
 
-        points = [p];
+        points = [];
 
         // Compute new points
         // Each new point is located midway between
         // last point and a randomly chosen vertex
 
-        for (var i = 0; points.length < NumPoints; ++i) {
-            var j = Math.floor(Math.random() * 3);
-            p = add(points[i], vertices[j]);
-            p = scale(0.5, p);
-            points.push(p);
-        }
+        for (var i = -1; i <= 1; i += 2) {
+            for (var j = -1; j <= 1; j += 2) {
+                p = vec2(i, -j)
+                points.push(p);
+            }
 
+        }
         //
         //  Configure WebGL
         //
@@ -58,22 +58,24 @@ window.onload = function init() // The first function to get executed
         gl.useProgram(program);
 
         // Load the data into the GPU
-
         var bufferId = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
         gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
+        var offset = gl.getAttribLocation(program, "offset");
 
-        // Associate out shader variables with our data buffer
 
         var vPosition = gl.getAttribLocation(program, "vPosition");
         gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(vPosition);
 
         render();
+
+        // Associate out shader variables with our data buffer
+
     };
 
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.POINTS, 0, points.length);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length);
 }
