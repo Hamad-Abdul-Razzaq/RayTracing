@@ -22,7 +22,7 @@
         } // What does this draw? (assume entire screen is rendered) 
         // bool inArea(float cX, float cY) {if (cX < 40.0 && cX > -40.0 && cY < 40.0 && cY > -40.0){return true;} else {return false;}}
         void main() {
-            float cX=(gl_FragCoord.x - 512.0/2.0)+128.0;
+            float cX=(gl_FragCoord.x - 512.0/2.0);
             float cY=gl_FragCoord.y - 512.0/2.0;
             float sX = (gl_FragCoord.x - 512.0/2.0)-128.0; 
             if (inArea(sX, cY)==2){ 
@@ -35,7 +35,7 @@
                 gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
             }
             else{
-                gl_FragColor=vec4(0.0, 0.0, 0.0, 1.0);
+                gl_FragColor=vec4(0.0, 1.0, 0.0, 1.0);
             }
         } </script>
 

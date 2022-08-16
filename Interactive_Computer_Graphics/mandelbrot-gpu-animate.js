@@ -90,8 +90,12 @@ window.onload = function init() // The first function to get executed
         gl.viewport(0, 0, canvas.width, canvas.height);
 
         //  Load shaders and initialize attribute buffers
-        var vert_shd = document.getElementById("test");
-        console.log(vert_shd);
+        // var vert_shd = document.getElementById("test").innerHTML;
+        // console.log(vert_shd);
+        var vert_shd;
+        fetch("https://github.com/HamadAbdulRazzaq/RayTracing-with-Shaders/blob/main/Interactive_Computer_Graphics/vert_shader.glsl")
+            .then(response => response.text())
+            .then(text => console.log(text))
 
         program = initShaders(gl, "vertex-shader", "fragment-shader");
         gl.useProgram(program);
