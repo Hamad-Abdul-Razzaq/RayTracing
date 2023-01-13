@@ -62,14 +62,11 @@ window.onload = function init() // The first function to get executed
         var all_coord = [
             0.0, -100.5, -1.0, 100.0,
             0.0, 0.0, -1.0, 0.5,
-            1.5, 0.0, -1.0, 0.4, -1.5, 0.0, -1.0, 0.4
         ];
 
         var type = [
             0.0,
             0.0,
-            0.0,
-            0.0
         ];
         // Texture End
         // console.log("good");
@@ -78,7 +75,7 @@ window.onload = function init() // The first function to get executed
         var scene = gl.getUniformLocation(program, "scene")
         gl.uniform4fv(scene, all_coord);
         var n = gl.getUniformLocation(program, "n");
-        gl.uniform1f(n, 3.0);
+        gl.uniform1f(n, 2.0);
 
         render();
 
@@ -141,5 +138,5 @@ function render() {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length);
-    window.requestAnimationFrame(render);
+    // window.requestAnimationFrame(render);
 }

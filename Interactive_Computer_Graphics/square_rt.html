@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>GPU - Mandelbrot Set</title>
- 
+
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 vPos;
         uniform vec3 origin;
@@ -16,6 +16,8 @@
         uniform float r2;
         uniform float r3;
         uniform vec2 rnd;
+        uniform vec3 cs;
+        uniform float hl;
         
         
         void main() {
@@ -28,10 +30,15 @@
         precision mediump float;
         uniform vec3 origin;
         varying vec4 vPosition;
-        uniform float n;
-        uniform vec4 scene[50];
-        uniform float type[50];
+        uniform vec3 center1;
+        uniform vec3 center2;
+        uniform vec3 center3;
+        uniform float r1;
+        uniform float r2;
+        uniform float r3;
         uniform vec2 rnd;
+        uniform vec3 cs;
+        uniform float hl;
         const float infinity = 1.0 / 0.0;
         vec2 co = rnd;
 
@@ -190,18 +197,7 @@
             hit_record temp_rec;
             bool hit_anything = false;
             float closest_so_far = t_max;
-            
-            for (int i=0; i < 4; i++){
-                if (int(type[i]) == 0){
-                    if(hit_sphere_(vec3(scene[i].x, scene[i].y, scene[i].z), scene[i].w, r, t_min, t_max, temp_rec)) {    
-                        hit_anything = true;
-                        closest_so_far = temp_rec.t;
-                        rec = temp_rec;
-                    }
-                }
-            }
-
-            /*if(hit_sphere_(vec3(scene[1].x, scene[1].y, scene[1].z), scene[1].w, r, t_min, t_max, temp_rec)) {
+            if(hit_sphere_(center2, r2, r, t_min, t_max, temp_rec)) {
                 hit_anything = true;
                 closest_so_far = temp_rec.t;
                 rec = temp_rec;
@@ -215,13 +211,13 @@
                 hit_anything = true;
                 closest_so_far = temp_rec.t;
                 rec = temp_rec;
-            }*/ 
+            }
             return hit_anything;
         }
         
         vec4 ray_color(ray r) {
-            vec3 center = vec3(scene[0].x, scene[0].y, scene[0].z);
-            float rd = scene[0].w;
+            vec3 center = center1;
+            float rd = r1;
             vec3 p = r.direction;
             float t = hit_sphere(center, rd, r);
             if(t > 0.0) {
@@ -258,21 +254,38 @@
             return add_color(color_1, color_2);
         
         }
+        float hit_square(ray r, vec3 center, float hl_){
+            if ((r.direction.x <= center.x + hl_ && r.direction.x >= center.x - hl_) && (r.direction.y <= center.y + hl_ && r.direction.y >= center.y - hl_)){
+                return 1.0;
+                
+            }
+            else{
+                return 0.0;
+            }
+        }
+
+        vec4 ray_color3(ray r){
+            if (hit_square(r, cs, hl) == 1.0){
+                return vec4(1.0, 0.0, 0.0, 1.0);
+            }
+            else{
+                return vec4(0.0, 0.0, 0.0, 1.0);
+            }
+        }
         
         void main() {
             ray r;
             r.origin = origin;
-            vec4 avg_clr = vec4(0.0, 0.0, 0.0, 1.0);
+            /*vec4 avg_clr = vec4(0.0, 0.0, 0.0, 1.0);
             for (float i = 0.0; i < 100.0; i++){
                 float x_ = vPosition.x + (rand(co)/600.0);
                 float y_ = vPosition.y + (rand(co)/600.0);
                 r.direction = vec3(x_, y_, vPosition.z);
                 avg_clr += ray_color2(r);
-            }
-            gl_FragColor = vec4(avg_clr.x/100.0, avg_clr.y/100.0, avg_clr.z/100.0, 1.0);
-            //r.direction = vec3(vPosition.x, vPosition.y, vPosition.z);
-            //gl_FragColor = ray_color2(r);
-            
+            }*/
+            r.direction = vec3(vPosition.x, vPosition.y, vPosition.z);
+            //gl_FragColor = vec4(avg_clr.x/100.0, avg_clr.y/100.0, avg_clr.z/100.0, 1.0);
+            gl_FragColor = ray_color3(r);
         }
     </script>
 
@@ -280,7 +293,7 @@
     <script type="text/javascript" src="../Common/initShaders.js"></script>
     <script type="text/javascript" src="../Common/MV.js"></script>
     <script src="https://unpkg.com/mathjs@9.5.0/lib/browser/math.js"></script>
-    <script type="text/javascript" src="sphere2.js"></script>
+    <script type="text/javascript" src="square_rt.js"></script>
 </head>
 <style>
     canvas, div,

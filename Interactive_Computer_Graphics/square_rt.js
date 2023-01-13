@@ -7,7 +7,6 @@ var NumPoints = 5000;
 var origin;
 var xp = 0.0;
 var yp = 0.0;
-var zp = 1.0;
 var right = true;
 var up = true;
 var c1 = vec3(0.0, 0.0, -1.0);
@@ -17,6 +16,8 @@ var r2 = 100.0;
 var c3 = vec3(1.5, 0.0, -1.0);
 var r3 = 0.4;
 var rnd = vec2(Math.random(), Math.random());
+var center = vec3(0.0, 0.0, -1.0);
+var lgt = 0.25;
 
 window.onload = function init() // The first function to get executed
     {
@@ -58,27 +59,9 @@ window.onload = function init() // The first function to get executed
         gl.useProgram(program);
 
 
-        // Texture Start
-        var all_coord = [
-            0.0, -100.5, -1.0, 100.0,
-            0.0, 0.0, -1.0, 0.5,
-            1.5, 0.0, -1.0, 0.4, -1.5, 0.0, -1.0, 0.4
-        ];
 
-        var type = [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-        ];
-        // Texture End
+
         // console.log("good");
-        var tp = gl.getUniformLocation(program, "type");
-        gl.uniform1f(tp, type);
-        var scene = gl.getUniformLocation(program, "scene")
-        gl.uniform4fv(scene, all_coord);
-        var n = gl.getUniformLocation(program, "n");
-        gl.uniform1f(n, 3.0);
 
         render();
 
@@ -88,7 +71,7 @@ window.onload = function init() // The first function to get executed
 
 
 function render() {
-    origin = vec3(xp, yp, zp);
+    origin = vec3(xp, yp, 0.0);
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -104,17 +87,6 @@ function render() {
     //     xp += 0.01;
     // } else if (xp > -2.5 && !right) {
     //     xp -= 0.01;
-    // }
-
-    // if (zp >= 500 || zp <= 0.0) {
-    //     right = !right;
-    // }
-    // if (zp < 500 && right) {
-    //     zp += 0.2;
-    //     yp -= 100.5 / 1250;
-    // } else if (zp >= 0.0 && !right) {
-    //     zp -= 0.2;
-    //     yp += 100.5 / 1250;
     // }
 
     // if (yp >= 0.5 || yp <= -0.5){
@@ -138,8 +110,31 @@ function render() {
     var op = gl.getUniformLocation(program, "rnd");
     gl.uniform2fv(op, rnd);
 
+    var center1 = gl.getUniformLocation(program, "center1");
+    gl.uniform3fv(center1, c1);
+
+    var center2 = gl.getUniformLocation(program, "center2");
+    gl.uniform3fv(center2, c2);
+
+    var center3 = gl.getUniformLocation(program, "center3");
+    gl.uniform3fv(center3, c3);
+
+    var radius1 = gl.getUniformLocation(program, "r1");
+    gl.uniform1f(radius1, r1);
+
+    var radius3 = gl.getUniformLocation(program, "r3");
+    gl.uniform1f(radius3, r3);
+
+    var radius2 = gl.getUniformLocation(program, "r2");
+    gl.uniform1f(radius2, r2);
+
+    var hl = gl.getUniformLocation(program, "hl");
+    gl.uniform1f(hl, lgt);
+
+    var cs = gl.getUniformLocation(program, "cs");
+    gl.uniform3fv(cs, center);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length);
-    window.requestAnimationFrame(render);
+    //window.requestAnimationFrame(render);
 }
